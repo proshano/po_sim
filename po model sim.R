@@ -1,6 +1,4 @@
 
-
-
 # Load necessary libraries
 library(rms)
 library(dplyr)
@@ -11,6 +9,7 @@ library(broom)
 library(ggplot2)
 library(parallel)
 library(pbapply)
+library(viridis)
 
 # Set the random seed for reproducibility
 set.seed(1)
@@ -197,14 +196,14 @@ custom_labeller <- labeller(
   }
 )
 
-# Define colorblind-friendly palette
-colorblind_palette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442")
+# Define colorblind-friendly palette using viridis
+colorblind_palette <- viridis(4)
 
 # Create plot for bias
 plot_bias <- ggplot(all_results, aes(x = TotalSampleSize)) +
   geom_line(aes(y = BiasApprox, color = "PO Model", linetype = "PO Model"), size = 1) +
   geom_line(aes(y = BiasWinP, color = "WinP", linetype = "WinP"), size = 1) +
-  geom_line(aes(y = BiasConc, color = "Calculated", linetype = "Normal"), size = 1) +
+  geom_line(aes(y = BiasConc, color = "Calculated", linetype = "Calculated"), size = 1) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
   facet_grid(Ratio ~ VarRatio, labeller = custom_labeller) +
   scale_color_manual(values = colorblind_palette) +
@@ -221,8 +220,8 @@ plot_bias <- ggplot(all_results, aes(x = TotalSampleSize)) +
 plot_coverage <- ggplot(all_results, aes(x = TotalSampleSize)) +
   geom_line(aes(y = CoverageApprox, color = "PO Model", linetype = "PO Model"), size = 1) +
   geom_line(aes(y = CoverageWinP, color = "WinP", linetype = "WinP"), size = 1) +
-  geom_line(aes(y = CoverageConcNormal, color = "Normal", linetype = "Normal"), size = 1) +
-  geom_line(aes(y = CoverageConcBoot, color = "Bootstrap", linetype = "Bootstrap"), size = 1) +
+  geom_line(aes(y = CoverageConcNormal, color = "Normal (Calculated)", linetype = "Normal (Calculated)"), size = 1) +
+  geom_line(aes(y = CoverageConcBoot, color = "Bootstrap (Calculated)", linetype = "Bootstrap (Calculated)"), size = 1) +
   geom_hline(yintercept = 0.95, linetype = "dashed", color = "red") +
   facet_grid(Ratio ~ VarRatio, labeller = custom_labeller) +
   scale_color_manual(values = colorblind_palette) +
