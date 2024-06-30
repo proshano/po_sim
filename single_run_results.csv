@@ -1,0 +1,2 @@
+"TotalSampleSize","Ratio","VarRatio","BiasApprox","BiasWinP","BiasConc","CoverageApprox","CoverageWinP","CoverageConcNormal","CoverageConcBoot"
+1000,1,2,-1.02295354058403,-0.749227862529487,-2.29765397897792,TRUE,TRUE,TRUE,TRUE
