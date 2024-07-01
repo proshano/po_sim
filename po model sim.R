@@ -133,9 +133,9 @@ run_simulation <- function(total_n, ratio, var2, var_ratio, num_runs) {
 }
 
 # Define parameters
-num_runs <- 100  # Number of simulation runs for each sample size
+num_runs <- 200  # Number of simulation runs for each sample size
 ratios <- c(.5, 1, 2,5)  # Ratios of n1 to n2
-total_sample_sizes <- c(100, 500, 1000, 5000)  # Sequence of total sample sizes
+total_sample_sizes <- c(100, 500, 1000, 2000)  # Sequence of total sample sizes
 var2 <- 1  # Fixed variance for group 2
 var_ratios <- c(0.5, 1, 2,5)  # Variance ratios for group 1 compared to group 2 (var1 = var2 * ratio)
 
@@ -147,9 +147,9 @@ param_combinations <- expand.grid(
 )
 
 # Set up parallel processing
-num_cores <- 6
+num_cores <- 9
 cl <- makeCluster(num_cores)
-clusterExport(cl, c("run_simulation", "num_runs", "var2", "param_combinations"))
+clusterExport(cl, c("run_simulation", "num_runs", "var2", "param_combinations", "calculate_winP"))
 clusterEvalQ(cl, {
   library(rms)
   library(dplyr)
@@ -157,7 +157,9 @@ clusterEvalQ(cl, {
   library(sandwich)
   library(lmtest)
   library(broom)
+  library(pbapply)
 })
+clusterSetRNGStream(cl, 12345)
 
 # Run simulations in parallel
 all_results <- pblapply(1:nrow(param_combinations), function(i) {
