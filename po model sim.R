@@ -1,4 +1,26 @@
 
+# List of required packages
+required_packages <- c("rms", "dplyr", "winprob", "sandwich", "lmtest", "broom", "ggplot2", "parallel", "pbapply", "viridis")
+
+# Function to check and install missing packages
+check_and_install_packages <- function(packages) {
+  install_if_missing <- function(pkg) {
+    if (!require(pkg, character.only = TRUE)) {
+      if (pkg == "winprob") {
+        if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+        devtools::install_github("proshano/winprob")
+      } else {
+        install.packages(pkg)
+      }
+      library(pkg, character.only = TRUE)
+    }
+  }
+  invisible(lapply(packages, install_if_missing))
+}
+
+# Run the function to check and install missing packages
+check_and_install_packages(required_packages)
+
 # Load necessary libraries
 library(rms)
 library(dplyr)
@@ -112,10 +134,10 @@ run_simulation <- function(total_n, ratio, var2, var_ratio, num_runs) {
 
 # Define parameters
 num_runs <- 100  # Number of simulation runs for each sample size
-ratios <- c(1, 5, 10)  # Ratios of n1 to n2
-total_sample_sizes <- c(100, 500, 1000)  # Sequence of total sample sizes
+ratios <- c(.5, 1, 2,5)  # Ratios of n1 to n2
+total_sample_sizes <- c(100, 500, 1000, 5000)  # Sequence of total sample sizes
 var2 <- 1  # Fixed variance for group 2
-var_ratios <- c(1, 2, 5)  # Variance ratios for group 1 compared to group 2 (var1 = var2 * ratio)
+var_ratios <- c(0.5, 1, 2,5)  # Variance ratios for group 1 compared to group 2 (var1 = var2 * ratio)
 
 # Create a list of all parameter combinations
 param_combinations <- expand.grid(
@@ -125,7 +147,7 @@ param_combinations <- expand.grid(
 )
 
 # Set up parallel processing
-num_cores <- 4
+num_cores <- 6
 cl <- makeCluster(num_cores)
 clusterExport(cl, c("run_simulation", "num_runs", "var2", "param_combinations"))
 clusterEvalQ(cl, {
