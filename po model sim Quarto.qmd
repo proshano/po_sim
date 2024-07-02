@@ -1,4 +1,48 @@
+---
+title: "Evaluating the performance of the proportional odds model in estimating Zou's Win Probability."
+author: "Pavel Roshanov & GY Zou"
+date: "`r Sys.Date()`"
+format:
+   pdf:
+    keep-tex: true
+    include-in-header: 
+       text: |
+         \usepackage{fvextra}
+         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+    highlight-style: tango
+    code-block-bg: "#f1f3f5"
+    code-block-border-left: "#31BAE9"
+    code-line-numbers: false
+    code-overflow: wrap
+    code-fold: true
+    toc: true
+    toc-depth: 3
 
+execute:
+  echo: true
+  warning: false
+  message: false
+  include-before-body:
+  text: |
+    \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+      showspaces = false,
+      showtabs = false,
+      breaksymbolleft={},
+      breaklines
+    }
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, linewidth = 60)
+```
+
+## Introduction
+
+This document contains a simulation study comparing different methods for estimating the Win Probability.
+
+## Load Required Packages
+
+```{r load-packages}
 # List of required packages
 required_packages <- c("rms", "dplyr", "winprob", "sandwich", "lmtest", "broom", "ggplot2", "parallel", "pbapply", "viridis")
 
@@ -32,9 +76,14 @@ library(ggplot2)
 library(parallel)
 library(pbapply)
 library(viridis)
+```
 
+## Set Simulation Parameters
 
-# Define simulation parameters
+Estimates for each parameter combination are calculated in 1825 samples.
+
+```{r set-parameters}
+# Define parameters
 num_runs <- 1825  # Number of simulation runs for each sample size
 ratios <- c(.5, 1, 2,5)  # Ratios of n1 to n2
 total_sample_sizes <- c(100, 500, 1000, 2000)  # Sequence of total sample sizes
@@ -47,11 +96,18 @@ param_combinations <- expand.grid(
   ratio = ratios,
   var_ratio = var_ratios
 )
+```
 
+## Set Random Seed
 
+```{r set-seed}
 # Set the random seed for reproducibility
 set.seed(1)
+```
 
+## Define Simulation Function
+
+```{r define-simulation-function}
 # Define the simulation function
 run_simulation <- function(total_n, ratio, var2, var_ratio, num_runs) {
   results <- data.frame()
@@ -147,7 +203,14 @@ run_simulation <- function(total_n, ratio, var2, var_ratio, num_runs) {
   
   return(list(results = results, valid_runs = valid_runs))
 }
+```
 
+## Run Simulations
+
+Simulations take advantage of parallel processing.
+
+```{r run-simulations}
+#| eval: false
 
 # Set up parallel processing
 num_cores <- detectCores() - 1
@@ -198,17 +261,24 @@ stopCluster(cl)
 
 # Combine results
 all_results <- do.call(rbind, all_results)
+```
 
-# Print summary statistics
-cat("\nSummary Statistics:\n")
-print(all_results)
+## Save Results
+
+```{r save-results}
+#| eval: false
 
 # Save results
 write.csv(all_results, "simulation_summary_results.csv", row.names = FALSE)
 
 cat("\nResults saved to 'simulation_summary_results.csv'\n")
+```
 
-# Visualization code starts here
+## Visualization
+
+```{r create-plots}
+#| eval: false
+
 # Convert Ratio and VarRatio to factors for better plotting
 all_results$Ratio <- factor(all_results$Ratio, levels = ratios)
 all_results$VarRatio <- factor(all_results$VarRatio, levels = var_ratios)
@@ -268,8 +338,13 @@ print(plot_coverage)
 # Save the plots
 ggsave("c_index_bias_comparison_plot.jpg", plot_bias, width = 12, height = 10, dpi = 300)
 ggsave("c_index_coverage_comparison_plot.jpg", plot_coverage, width = 12, height = 10, dpi = 300)
+```
 
-#Print final summary statistics
+## Final Summary Statistics
+
+```{r final-summary}
+#| eval: false
+
 # Print final summary statistics
 summary_stats <- all_results %>%
   group_by(TotalSampleSize, Ratio, VarRatio) %>%
@@ -286,7 +361,7 @@ summary_stats <- all_results %>%
             .groups = 'drop') %>%
   rename(
     `Bias PO Model` = mean_BiasApprox,
-    `Bias WinP` = mean_BiasWinP,
+`Bias WinP` = mean_BiasWinP,
     `Bias Normal` = mean_BiasConc,
     `Coverage PO Model` = mean_CoverageApprox,
     `Coverage WinP` = mean_CoverageWinP,
@@ -299,3 +374,6 @@ print(summary_stats)
 
 # Save the summary statistics
 write.csv(summary_stats, "final_summary_statistics.csv", row.names = FALSE)
+```
+
+Note that I've set `eval: false` for the chunks that run the simulations and create plots. This is because these operations are time-consuming and may not be necessary every time you render the document. You can change these to `eval: true` when you want to run the full simulation and generate new results.
