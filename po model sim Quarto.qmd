@@ -3,17 +3,16 @@ title: "Evaluating the performance of the proportional odds model in estimating 
 author: "Pavel Roshanov & GY Zou"
 date: "`r Sys.Date()`"
 format:
-   pdf:
+   docx:
     keep-tex: true
     include-in-header: 
        text: |
          \usepackage{fvextra}
-         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
     highlight-style: tango
     code-block-bg: "#f1f3f5"
     code-block-border-left: "#31BAE9"
     code-line-numbers: false
-    code-overflow: wrap
     code-fold: true
     toc: true
     toc-depth: 3
@@ -27,14 +26,11 @@ execute:
     \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
       showspaces = false,
       showtabs = false,
-      breaksymbolleft={},
       breaklines
     }
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, linewidth = 60)
-```
+
 
 ## Introduction
 
@@ -269,7 +265,7 @@ all_results <- do.call(rbind, all_results)
 #| eval: true
 
 # Save results
-write.csv(all_results, "simulation_summary_results.csv", row.names = true)
+write.csv(all_results, "simulation_summary_results.csv", row.names = FALSE)
 
 cat("\nResults saved to 'simulation_summary_results.csv'\n")
 ```
@@ -373,7 +369,7 @@ summary_stats <- all_results %>%
 print(summary_stats)
 
 # Save the summary statistics
-write.csv(summary_stats, "final_summary_statistics.csv", row.names = true)
+write.csv(summary_stats, "final_summary_statistics.csv", row.names = FALSE)
 ```
 
-Note that I've set `eval: false` for the chunks that run the simulations and create plots. This is because these operations are time-consuming and may not be necessary every time you render the document. You can change these to `eval: true` when you want to run the full simulation and generate new results.
+

@@ -35,7 +35,7 @@ library(viridis)
 
 
 # Define simulation parameters
-num_runs <- 1825  # Number of simulation runs for each sample size
+num_runs <- 10  # Number of simulation runs for each sample size
 ratios <- c(.5, 1, 2,5)  # Ratios of n1 to n2
 total_sample_sizes <- c(100, 500, 1000, 2000)  # Sequence of total sample sizes
 var2 <- 1  # Fixed variance for group 2

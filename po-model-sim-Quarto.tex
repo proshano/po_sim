@@ -119,7 +119,7 @@
 \makeatother
 
 \usepackage{fvextra}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -172,7 +172,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{HTML}{f1f3f5}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, sharp corners, colback={codebgcolor}, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, colback={codebgcolor}, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -257,7 +257,7 @@ Estimates for each parameter combination are calculated in 1825 samples.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Define parameters}
-\NormalTok{num\_runs }\OtherTok{\textless{}{-}} \DecValTok{1825}  \CommentTok{\# Number of simulation runs for each sample size}
+\NormalTok{num\_runs }\OtherTok{\textless{}{-}} \DecValTok{1}  \CommentTok{\# Number of simulation runs for each sample size}
 \NormalTok{ratios }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(.}\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)  }\CommentTok{\# Ratios of n1 to n2}
 \NormalTok{total\_sample\_sizes }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{500}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DecValTok{2000}\NormalTok{)  }\CommentTok{\# Sequence of total sample sizes}
 \NormalTok{var2 }\OtherTok{\textless{}{-}} \DecValTok{1}  \CommentTok{\# Fixed variance for group 2}
@@ -403,6 +403,58 @@ Simulations take advantage of parallel processing.
   \FunctionTok{library}\NormalTok{(broom)}
   \FunctionTok{library}\NormalTok{(pbapply)}
 \NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[[1]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[2]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[3]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[4]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[5]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[6]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[7]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[8]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+
+[[9]]
+ [1] "pbapply"   "broom"     "lmtest"    "zoo"       "sandwich"  "winprob"  
+ [7] "dplyr"     "rms"       "Hmisc"     "stats"     "graphics"  "grDevices"
+[13] "utils"     "datasets"  "methods"   "base"     
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \FunctionTok{clusterSetRNGStream}\NormalTok{(cl, }\DecValTok{12345}\NormalTok{)}
 
 \CommentTok{\# Run simulations in parallel}
@@ -452,6 +504,11 @@ Simulations take advantage of parallel processing.
 \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Results saved to \textquotesingle{}simulation\_summary\_results.csv\textquotesingle{}}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+
+Results saved to 'simulation_summary_results.csv'
+\end{verbatim}
 
 \subsection{Visualization}\label{visualization}
 
@@ -511,8 +568,21 @@ Simulations take advantage of parallel processing.
 
 \CommentTok{\# Display the plots}
 \FunctionTok{print}\NormalTok{(plot\_bias)}
-\FunctionTok{print}\NormalTok{(plot\_coverage)}
+\end{Highlighting}
+\end{Shaded}
 
+\includegraphics{po-model-sim-Quarto_files/figure-pdf/create-plots-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(plot\_coverage)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{po-model-sim-Quarto_files/figure-pdf/create-plots-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{\# Save the plots}
 \FunctionTok{ggsave}\NormalTok{(}\StringTok{"c\_index\_bias\_comparison\_plot.jpg"}\NormalTok{, plot\_bias, }\AttributeTok{width =} \DecValTok{12}\NormalTok{, }\AttributeTok{height =} \DecValTok{10}\NormalTok{, }\AttributeTok{dpi =} \DecValTok{300}\NormalTok{)}
 \FunctionTok{ggsave}\NormalTok{(}\StringTok{"c\_index\_coverage\_comparison\_plot.jpg"}\NormalTok{, plot\_coverage, }\AttributeTok{width =} \DecValTok{12}\NormalTok{, }\AttributeTok{height =} \DecValTok{10}\NormalTok{, }\AttributeTok{dpi =} \DecValTok{300}\NormalTok{)}
@@ -549,17 +619,36 @@ Simulations take advantage of parallel processing.
   \FunctionTok{arrange}\NormalTok{(TotalSampleSize, Ratio, VarRatio)}
 
 \FunctionTok{print}\NormalTok{(summary\_stats)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+# A tibble: 64 x 12
+   TotalSampleSize Ratio VarRatio mean_TrueConc `Bias PO Model` `Bias WinP`
+             <dbl> <fct> <fct>            <dbl>           <dbl>       <dbl>
+ 1             100 0.5   0.5              0.793          -1.10       -0.119
+ 2             100 0.5   1                0.760           8.04        8.63 
+ 3             100 0.5   2                0.718         -13.8       -13.9  
+ 4             100 0.5   5                0.658           6.65        2.90 
+ 5             100 1     0.5              0.793           4.63        5.44 
+ 6             100 1     1                0.760           4.48        4.86 
+ 7             100 1     2                0.718          11.3        11.9  
+ 8             100 1     5                0.658          16.0        15.4  
+ 9             100 2     0.5              0.793           4.14        5.13 
+10             100 2     1                0.760          -0.624       0.898
+# i 54 more rows
+# i 6 more variables: `Bias Normal` <dbl>, `Coverage PO Model` <dbl>,
+#   `Coverage WinP` <dbl>, `Coverage Normal` <dbl>, `Coverage Bootstrap` <dbl>,
+#   ValidRuns <dbl>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{\# Save the summary statistics}
 \FunctionTok{write.csv}\NormalTok{(summary\_stats, }\StringTok{"final\_summary\_statistics.csv"}\NormalTok{, }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Note that I've set \texttt{eval:\ false} for the chunks that run the
-simulations and create plots. This is because these operations are
-time-consuming and may not be necessary every time you render the
-document. You can change these to \texttt{eval:\ true} when you want to
-run the full simulation and generate new results.
 
 
 
