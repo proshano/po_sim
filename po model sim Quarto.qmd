@@ -210,7 +210,7 @@ run_simulation <- function(total_n, ratio, var2, var_ratio, num_runs) {
 Simulations take advantage of parallel processing.
 
 ```{r run-simulations}
-#| eval: false
+#| eval: true
 
 # Set up parallel processing
 num_cores <- detectCores() - 1
@@ -266,10 +266,10 @@ all_results <- do.call(rbind, all_results)
 ## Save Results
 
 ```{r save-results}
-#| eval: false
+#| eval: true
 
 # Save results
-write.csv(all_results, "simulation_summary_results.csv", row.names = FALSE)
+write.csv(all_results, "simulation_summary_results.csv", row.names = true)
 
 cat("\nResults saved to 'simulation_summary_results.csv'\n")
 ```
@@ -277,7 +277,7 @@ cat("\nResults saved to 'simulation_summary_results.csv'\n")
 ## Visualization
 
 ```{r create-plots}
-#| eval: false
+#| eval: true
 
 # Convert Ratio and VarRatio to factors for better plotting
 all_results$Ratio <- factor(all_results$Ratio, levels = ratios)
@@ -343,7 +343,7 @@ ggsave("c_index_coverage_comparison_plot.jpg", plot_coverage, width = 12, height
 ## Final Summary Statistics
 
 ```{r final-summary}
-#| eval: false
+#| eval: true
 
 # Print final summary statistics
 summary_stats <- all_results %>%
@@ -373,7 +373,7 @@ summary_stats <- all_results %>%
 print(summary_stats)
 
 # Save the summary statistics
-write.csv(summary_stats, "final_summary_statistics.csv", row.names = FALSE)
+write.csv(summary_stats, "final_summary_statistics.csv", row.names = true)
 ```
 
 Note that I've set `eval: false` for the chunks that run the simulations and create plots. This is because these operations are time-consuming and may not be necessary every time you render the document. You can change these to `eval: true` when you want to run the full simulation and generate new results.
